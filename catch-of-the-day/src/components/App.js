@@ -7,6 +7,8 @@ import Inventory from './Inventory'
 import sampleFishes from '../sample-fishes' 
 import Fish from './Fish'
 
+import '../css/style.css'
+
 
 class App extends React.Component {
   state = {
@@ -38,7 +40,7 @@ class App extends React.Component {
 
 
   addFish = fish => {
-    // 1. Take a copy of state
+    // 1. Take a copy of the current state
     const fishes = { ...this.state.fishes }
     // 2. Add our new fish to the fishes variable
     fishes[`fish${Date.now()}`] = fish
@@ -57,19 +59,40 @@ class App extends React.Component {
     this.setState({ fishes })
   }
 
+  deleteFish = (key) => {
+    // 1. Take a copy of the current state
+    const fishes = { ...this.state.fishes }
+
+    // 2. Update the fish
+    fishes[key] = null
+
+    // 3. Update state
+    this.setState({ fishes })
+  }
+
   loadSampleFishes = () => {
     this.setState({ fishes: sampleFishes })
   }
 
   addToOrder = key => {
-    // 1. Take a copy of state
+    // 1. Take a copy of the current state
     const order = { ...this.state.order }
     // 2. Either add to order or update the number in order 
     order[key] = order[key] + 1 || 1
     // 3. Update state
     this.setState({ order })
   }
-  
+
+  removeFromOrder = key => {
+    // 1. Take a copy of the current state
+    const order = { ...this.state.order }
+
+    // 2. Remove item from the order
+    delete order[key]
+
+    // 3. Update state
+    this.setState({ order })
+  }
 
   render() {
     const { fishes, order } = this.state
@@ -90,10 +113,12 @@ class App extends React.Component {
         <Order 
           fishes={fishes}
           order={order}
+          removeFromOrder={this.removeFromOrder}
         />
         <Inventory 
           addFish={this.addFish}
           updateFish={this.updateFish}
+          deleteFish={this.deleteFish}
           loadSampleFishes={this.loadSampleFishes}
           fishes={fishes}
         />
