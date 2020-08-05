@@ -1,9 +1,17 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 import { formatPrice } from '../helpers'
 
 class Order extends React.Component {
+  static propTypes = {
+    fishes: PropTypes.object.isRequired,
+    order: PropTypes.object.isRequired,
+    removeFromOrder: PropTypes.func.isRequired
+  }
+
+  // const styleObj = { textAlign: 'right' }
 
   renderOrder = key => {
     const { fishes, order } = this.props
@@ -28,6 +36,7 @@ class Order extends React.Component {
         </CSSTransition>
       )
     }
+
     return (
       <CSSTransition {...transitionOptions}>
         <li key={key}>
@@ -41,10 +50,10 @@ class Order extends React.Component {
                 <span>{count}</span>
               </CSSTransition>
             </TransitionGroup>
-            Kgs 
-            {fish.name}
-            {formatPrice(count * fish.price)}
-            <button onClick={() => this.props.removeFromOrder(key)}>&times;</button>
+            Kgs {fish.name} {formatPrice(count * fish.price)}
+            <button onClick={() => this.props.removeFromOrder(key)}>
+              &times;
+            </button>
           </span>
         </li>
       </CSSTransition >
@@ -71,7 +80,10 @@ class Order extends React.Component {
         <TransitionGroup component="ul" className="order">
           {orderIds.map(this.renderOrder)}
         </TransitionGroup>
-        <div className="total">Total: <strong>{formatPrice(total)}</strong></div>
+        <div className="total">
+          Total: 
+          <strong>{formatPrice(total)}</strong>
+        </div>
       </div>
     )
   }
